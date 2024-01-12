@@ -1,21 +1,25 @@
-name: Test deploy to BunnyCDN
-
+name: Deploy to BunnyCDN
 on:
   push:
     branches:
-      - feature/*
-  workflow_dispatch:
-
+      - master # replace this with the branch you want to deploy from
 jobs:
-  cd:
+  Build-and-Deploy:
     runs-on: ubuntu-latest
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-      - name: Deploy
-        uses: ayeressian/bunnycdn-storage-deploy@master
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install and Build
+        run: |
+          npm ci
+          npm run build
+        env:
+          CI: true
+          REACT_APP_API_URL: ${{ vars.REACT_APP_API_URL }}
+      - name: Deploy to BunnyCDN
+        uses: ayeressian/bunnycdn-storage-deploy@v2.0.2
         with:
-          source: "e2e/test-dir"
+          source: "build" # for create-react-app, the output directory is "build"
           storageZoneName: "${{ secrets.STORAGE_NAME }}"
           storagePassword: "${{ secrets.STORAGE_PASSWORD }}"
           accessKey: "${{ secrets.ACCOUNT_API_KEY }}"
