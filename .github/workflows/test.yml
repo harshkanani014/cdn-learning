@@ -18,7 +18,7 @@ jobs:
           source: "e2e/test-dir"
           storageZoneName: "${{ secrets.STORAGE_NAME }}"
           storagePassword: "${{ secrets.STORAGE_PASSWORD }}"
-          accessKey: "${{ secrets.ACCESS_KEY }}"
+          accessKey: "${{ secrets.ACCOUNT_API_KEY }}"
           pullZoneId: "${{ secrets.ZONE_ID }}"
           upload: "true"
           remove: "true"
